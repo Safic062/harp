@@ -1,0 +1,27 @@
+name: "X-Ray core reverse proxy"
+description: "X-Ray core reverse proxy container"
+version: "0.0.1"
+slug: "ha_xray_core_reverse_proxy"
+init: false
+arch:
+  - aarch64
+  - amd64
+  - armhf
+  - armv7
+  - i386
+options:
+  bridges:
+    - domain: my.example.com
+      portalAddr: "portal-ip.example.com:port"
+      portalPort: 1234
+      bridge: "homeassistant:8123"
+      uid: "5783a3e7-e373-51cd-8642-c83782b807c5"
+      tag: tag
+schema:
+  bridges:
+    - domain: str
+      portalAddr: str
+      portalPort: port
+      bridge: str
+      uid: str
+      tag: str

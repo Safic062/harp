@@ -18,15 +18,23 @@ for index in $(bashio::config 'bridges|keys'); do
 #   bashio::config.require.portal_user_id "bridges[${bridge}].portal_user_id"
 #   bashio::config.require.in_tag "bridges[${bridge}].in_tag"
 #   bashio::config.require.out_tag "bridges[${bridge}].out_tag"
+    # - domain: my.example.com
+    #   portalAddr: "portal-ip.example.com:port"
+    #   portalPort: 1234
+    #   bridge: "homeassistant:8123"
+    #   uid: "5783a3e7-e373-51cd-8642-c83782b807c5"
+    #   tag: tag
 
   DOMAIN=$(bashio::config "bridges[${index}].domain")
-  LOCAL=$(bashio::config "bridges[${index}].local")
-  PORTAL_ADDRESS=$(bashio::config "bridges[${index}].portal_address")
-  PORTAL_PORT=$(bashio::config "bridges[${index}].portal_port")
-  PORTAL_USER_ID=$(bashio::config "bridges[${index}].portal_user_id")
-  IN_TAG=$(bashio::config "bridges[${index}].in_tag")
-  OUT_TAG=$(bashio::config "bridges[${index}].out_tag")
-  CONN_TAG=$(bashio::config "bridges[${index}].conn_tag")
+  PORTAL_ADDR=$(bashio::config "bridges[${index}].portalAddr")
+  PORTAL_PORT=$(bashio::config "bridges[${index}].portalPort")
+  BRIDGE=$(bashio::config "bridges[${index}].bridge")
+  PORTAL_UID=$(bashio::config "bridges[${index}].uid")
+  TAG=$(bashio::config "bridges[${index}].tag")
+
+  IN_TAG="$TAG-bridge"
+  OUT_TAG="$TAG-out"
+  CONN_TAG="$TAG-conn"
 
   CF_BRIDGES=$CF_BRIDGES$(cat <<EOF
 $SEPARATOR
@@ -43,7 +51,7 @@ $SEPARATOR
       "tag": "$OUT_TAG",
       "protocol": "freedom",
       "settings": {
-        "redirect": "$LOCAL"
+        "redirect": "$BRIDGE"
       }
     },
     {
@@ -51,11 +59,11 @@ $SEPARATOR
       "settings": {
         "vnext": [
           {
-            "address": "$PORTAL_ADDRESS",
+            "address": "$PORTAL_ADDR",
             "port": $PORTAL_PORT,
             "users": [
               {
-                "id": "$PORTAL_USER_ID"
+                "id": "$PORTAL_UID"
               }
             ]
           }
