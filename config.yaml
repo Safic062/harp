@@ -4,11 +4,11 @@ version: "0.0.3"
 slug: "ha_xray_core_reverse_proxy"
 init: false
 arch:
-#  - aarch64
+  - aarch64
   - amd64
-#  - armhf
-#  - armv7
-#  - i386
+  - armhf
+  - armv7
+  - i386
 options:
   bridges:
     - domain: my.example.com
